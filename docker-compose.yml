@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0.25
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 4Wd232ek1222ED
+      MYSQL_DATABASE: donuts
+      TZ: "America/Santiago"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/:/docker-entrypoint-initdb.d/
+    network_mode: "host"
+
+  voyager_donuts:
+    image: "astrofrog/donuts_voyager:20240820"
+    container_name: donuts_voyager
+    network_mode: "host"
+    environment:
+      TZ: "America/Santiago"
+      TOML_FILE: "/donuts_configs/TBD.toml"
+    volumes:
+      - z:/RAW/DonutsCalibration:/voyager_calibration
+      - z:/RAW/DonutsLog:/voyager_log
+      - z:/RAW:/voyager_data
+      - z:/RAW/DonutsReference:/voyager_reference
+      - C:/Dropbox/donuts_configs:/donuts_configs
+
+volumes:
+  mysql-data:
